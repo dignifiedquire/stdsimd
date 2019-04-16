@@ -151,13 +151,13 @@ pub unsafe fn _mm512_xor_si512(a: __m512i, b: __m512i) -> __m512i {
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpshufb))]
 pub unsafe fn _mm512_shuffle_epi8(a: __m512i, b: __m512i) -> __m512i {
-    transmute(pshufb(a.as_i64x8(), b.as_i64x8()))
+    transmute(pshufb(a.as_i8x64(), b.as_i8x64()))
 }
 
 #[allow(improper_ctypes)]
 extern "C" {
     #[link_name = "llvm.x86.avx512.pshuf.b.512"]
-    fn pshufb(a: i64x8, b: i64x8) -> i64x8;
+    fn pshufb(a: i8x64, b: i8x64) -> i8x64;
 }
 
 #[cfg(test)]
