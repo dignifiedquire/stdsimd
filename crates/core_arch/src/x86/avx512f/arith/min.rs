@@ -64,12 +64,8 @@ pub unsafe fn _mm512_mask_max_round_pd(
     b: __m512d,
     round: i32,
 ) -> __m512d {
-    macro_rules! call {
-        ($imm8:expr) => {
-            maxpd512(a, b, src, k, $imm8)
-        };
-    }
-    constify_imm8!(round, call)
+    // FIXME: use correct k
+    maxpd512(a, b, src, 0x0, round)
 }
 
 /// Compares packed float64 elements in a and b, and stores packed maximum values using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
@@ -142,12 +138,8 @@ pub unsafe fn _mm512_mask_max_round_ps(
     b: __m512,
     round: i32,
 ) -> __m512 {
-    macro_rules! call {
-        ($imm8:expr) => {
-            maxps512(a, b, src, k, $imm8)
-        };
-    }
-    constify_imm8!(round, call)
+    // FIXME: use correct k
+    maxps512(a, b, src, 0x0, round)
 }
 
 /// Compares packed float32 elements in a and b, and stores packed maximum values using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
@@ -206,12 +198,8 @@ pub unsafe fn _mm_mask_max_round_sd(
     b: __m128d,
     round: i32,
 ) -> __m128d {
-    macro_rules! call {
-        ($imm8:expr) => {
-            maxsdround(a, b, src, k, $imm8)
-        };
-    }
-    constify_imm8!(round, call)
+    // FIXME: cannot select
+    maxsdround(a, b, src, k, round)
 }
 
 /// Compares the lower float64 elements in a and b, stores the maximum value in the lower destination element using zeromask k (the element is zeroed out when mask bit 0 is not set), and copies the upper element from a to the upper destination element.
@@ -270,12 +258,8 @@ pub unsafe fn _mm_mask_max_round_ss(
     b: __m128,
     round: i32,
 ) -> __m128 {
-    macro_rules! call {
-        ($imm8:expr) => {
-            maxssround(a, b, src, k, $imm8)
-        };
-    }
-    constify_imm8!(round, call)
+    // FIXME: cannot select
+    maxssround(a, b, src, k, round)
 }
 
 /// Compares the lower float32 elements in a and b, stores the maximum value in the lower destination element using zeromask k (the element is zeroed out when mask bit 0 is not set), and copies the upper element from a to the upper destination element.
