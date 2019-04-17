@@ -23,7 +23,7 @@ use stdsimd_test::assert_instr;
 
 /// Adds packed float64 elements in a and b, and stores the result.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_add_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpadpd))]
@@ -33,7 +33,7 @@ pub unsafe fn _mm512_add_pd(a: __m512d, b: __m512d) -> __m512d {
 
 /// Adds packed float64 elements in a and b, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_mask_add_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpadpd))]
@@ -43,7 +43,7 @@ pub unsafe fn _mm512_mask_add_pd(src: __m512d, k: __mmask8, a: __m512d, b: __m51
 
 /// Adds packed float64 elements in a and , and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddpd))]
@@ -53,7 +53,7 @@ pub unsafe fn _mm512_maskz_add_pd(k: __mmask8, a: __m512d, b: __m512d) -> __m512
 
 /// Adds packed float64 elements in a and b using rounding control round, and stores the result.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vaddpd))]
@@ -64,7 +64,7 @@ pub unsafe fn _mm512_add_round_pd(a: __m512d, b: __m512d, round: i32) -> __m512d
 
 /// Adds packed float64 elements in a and b using rounding control round, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vaddpd))]
@@ -85,7 +85,7 @@ pub unsafe fn _mm512_mask_add_round_pd(
 
 /// Adds packed float64 elements in a and b using rounding control round, and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vaddpd))]
@@ -102,7 +102,7 @@ pub unsafe fn _mm512_maskz_add_round_pd(
 
 /// Adds packed float32 elements in a and b, and stores the result.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
@@ -112,7 +112,7 @@ pub unsafe fn _mm512_add_ps(a: __m512, b: __m512) -> __m512 {
 
 /// Adds packed float32 elements in a and b, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
@@ -122,7 +122,7 @@ pub unsafe fn _mm512_mask_add_ps(src: __m512, k: __mmask16, a: __m512, b: __m512
 
 /// Adds packed float32 elements in a and b, and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
@@ -132,7 +132,7 @@ pub unsafe fn _mm512_maskz_add_ps(k: __mmask16, a: __m512, b: __m512) -> __m512 
 
 /// Adds packed float32 elements in a and b using rounding control round, and stores the result.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
@@ -143,7 +143,7 @@ pub unsafe fn _mm512_add_round_ps(a: __m512, b: __m512, round: i32) -> __m512 {
 
 /// Adds packed float32 elements in a and b using rounding control round, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
@@ -164,32 +164,32 @@ pub unsafe fn _mm512_mask_add_round_ps(
 
 /// Adds packed float32 elements in a and b using rounding control round, and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
 pub unsafe fn _mm512_maskz_add_round_ps(k: __mmask16, a: __m512, b: __m512, round: i32) -> __m512 {
-    let res: i32x16 = transmute(_mm512_add_round_ps(a, b, round));
-    let zero: i32x16 = transmute(_mm512_setzero_ps());
-    transmute(simd_select_bitmask(k, res, zero))
+    let zero = _mm512_setzero_ps();
+    _mm512_mask_add_round_ps(zero, k, a, b, round)
 }
 
 /// Adds the lower float64 element in a and b using rounding control round, stores the result in the lower destination element, and copies the upper element from a to the upper destination element.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_add_round_sd(a: __m128d, b: __m128d, round: i32) -> __m128d {
-    unimplemented!()
+    let zero = _mm_setzero_pd();
+    _mm_mask_add_round_sd(zero, -1i8 as __mmask8, a, b, round)
 }
 
 /// Adds the lower float64 element in a and b using rounding control round, stores the result in the lower destination element using writemask k (the element is copied from src when mask bit 0 is not set), and copies the upper element from a to the upper destination element.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_mask_add_round_sd(
     src: __m128d,
     k: __mmask8,
@@ -197,55 +197,63 @@ pub unsafe fn _mm_mask_add_round_sd(
     b: __m128d,
     round: i32,
 ) -> __m128d {
-    unimplemented!()
+    macro_rules! call {
+        ($imm8:expr) => {
+            addsdround(a, b, src, k, $imm8)
+        };
+    }
+    constify_imm8!(round, call)
 }
 
 /// Adds the lower float64 element in a and b using rounding control round, stores the result in the lower destination element using zeromask k (the element is zeroed out when mask bit 0 is not set), and copies the upper element from a to the upper destination element.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_maskz_add_round_sd(k: __mmask8, a: __m128d, b: __m128d, round: i32) -> __m128d {
-    unimplemented!()
+    let zero = _mm_setzero_pd();
+    _mm_mask_add_round_sd(zero, k, a, b, round)
 }
 
 /// Adds the lower float64 element in a and b, stores the result in the lower destination element using writemask k (the element is copied from src when mask bit 0 is not set), and copies the upper element from a to the upper destination element.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_mask_add_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
-    unimplemented!()
+    _mm_mask_add_round_sd(src, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
 /// Adds the lower float64 element in a and b, stores the result in the lower destination element using zeromask k (the element is zeroed out when mask bit 0 is not set), and copies the upper element from a to the upper destination element.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_maskz_add_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
-    unimplemented!()
+    let zero = _mm_setzero_pd();
+    _mm_mask_add_round_sd(zero, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
 /// Add the lower float32 element in a and b using rounding control round, stores the result in the lower destination element, and copies the upper three packed elements from a to the upper destination elements.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddss))]
 pub unsafe fn _mm_add_round_ss(a: __m128, b: __m128, round: i32) -> __m128 {
-    unimplemented!()
+    let zero = _mm_setzero_ps();
+    _mm_mask_add_round_ss(zero, -1i8 as __mmask8, a, b, round)
 }
 
 /// Add the lower float32 element in a and b using rounding control round, stores the result in the lower destination element using writemask k (the element is copied from src when mask bit 0 is not set), and copies the upper three packed elements from a to the upper destination elements.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vpaddss))]
 pub unsafe fn _mm_mask_add_round_ss(
     src: __m128,
     k: __mmask8,
@@ -253,37 +261,44 @@ pub unsafe fn _mm_mask_add_round_ss(
     b: __m128,
     round: i32,
 ) -> __m128 {
-    unimplemented!()
+    macro_rules! call {
+        ($imm8:expr) => {
+            addssround(a, b, src, k, $imm8)
+        };
+    }
+    constify_imm8!(round, call)
 }
 
 /// Add the lower float32 element in a and b using rounding control round, stores the result in the lower destination element using zeromask k (the element is zeroed out when mask bit 0 is not set), and copies the upper three packed elements from a to the upper destination elements.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddss))]
 pub unsafe fn _mm_maskz_add_round_ss(k: __mmask8, a: __m128, b: __m128, round: i32) -> __m128 {
-    unimplemented!()
+    let zero = _mm_setzero_ps();
+    _mm_mask_add_round_ss(zero, k, a, b, round)
 }
 
 /// Add the lower float32 element in a and b, stores the result in the lower destination element using writemask k (the element is copied from src when mask bit 0 is not set), and copies the upper three packed elements from a to the upper destination elements.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vpaddss))]
 pub unsafe fn _mm_mask_add_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
-    unimplemented!()
+    _mm_mask_add_round_ss(src, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
 /// Add the lower float32 element in a and b, stores the result in the lower destination element using zeromask k (the element is zeroed out when mask bit 0 is not set), and copies the upper three packed elements from a to the upper destination elements.
 ///
-/// [Intel's documentation]()
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vpaddss))]
 pub unsafe fn _mm_maskz_add_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
-    unimplemented!()
+    let zero = _mm_setzero_ps();
+    _mm_mask_add_round_ss(zero, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
 // -- Intrinsics for Determining Minimum and Maximum Values
@@ -305,6 +320,10 @@ extern "C" {
     fn addpd512(a: __m512d, b: __m512d, src: __m512d, k: __mmask8, round: i32) -> __m512d;
     #[link_name = "llvm.x86.avx512.mask.add.ps.512"]
     fn addps512(a: __m512, b: __m512, src: __m512, k: __mmask16, round: i32) -> __m512;
+    #[link_name = "llvm.x86.avx512.mask.add.sd.round"]
+    fn addsdround(a: __m128d, b: __m128d, src: __m128d, k: __mmask8, round: i32) -> __m128d;
+    #[link_name = "llvm.x86.avx512.mask.add.ss.round"]
+    fn addssround(a: __m128, b: __m128, src: __m128, k: __mmask8, round: i32) -> __m128;
 }
 
 #[cfg(test)]
@@ -368,5 +387,79 @@ mod tests {
 
         let r: __m512 = _mm512_maskz_add_ps(mask, a, b);
         assert_eq_m512(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm_mask_add_sd() {
+        let a = _mm_set_pd(1.0, 2.0);
+        let b = _mm_set_pd(1.0, 1.0);
+        let src = _mm_set_pd(9.0, 9.0);
+
+        let mask = 0b1010_1010u8 as i8;
+
+        let expected = _mm_set_pd(1.0, 9.0);
+
+        let r = _mm_mask_add_sd(src, mask, a, b);
+        assert_eq_m128d(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm_add_round_sd() {
+        let a = _mm_set_pd(8.0, 2.0);
+        let b = _mm_set_pd(1.0, 1.0);
+
+        let expected = _mm_set_pd(8.0, 3.0);
+
+        let r = _mm_add_round_sd(a, b, _MM_FROUND_CUR_DIRECTION);
+        assert_eq_m128d(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm_maskz_add_sd() {
+        let a = _mm_set_pd(1.0, 2.0);
+        let b = _mm_set_pd(2.0, 3.0);
+        let mask = 255u8 as i8;
+
+        let expected = _mm_set_pd(1.0, 5.0);
+
+        let r = _mm_maskz_add_sd(mask, a, b);
+        assert_eq_m128d(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm_mask_add_ss() {
+        let a = _mm_set_ps(1.0, 2.0, 1.0, 2.0);
+        let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
+        let src = _mm_set_ps(9.0, 9.0, 9.0, 9.0);
+
+        let mask = 1i8;
+
+        let expected = _mm_set_ps(1.0, 2.0, 1.0, 3.0);
+
+        let r = _mm_mask_add_ss(src, mask, a, b);
+        assert_eq_m128(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm_add_round_ss() {
+        let a = _mm_set_ps(8.0, 2.0, 8.0, 2.0);
+        let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
+
+        let expected = _mm_set_ps(8.0, 2.0, 8.0, 3.0);
+
+        let r = _mm_add_round_ss(a, b, _MM_FROUND_CUR_DIRECTION);
+        assert_eq_m128(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm_maskz_add_ss() {
+        let a = _mm_set_ps(1.0, 2.0, 1.0, 2.0);
+        let b = _mm_set_ps(2.0, 3.0, 2.0, 3.0);
+        let mask = 255u8 as i8;
+
+        let expected = _mm_set_ps(1.0, 2.0, 1.0, 5.0);
+
+        let r = _mm_maskz_add_ss(mask, a, b);
+        assert_eq_m128(r, expected);
     }
 }
