@@ -9,7 +9,10 @@
 //! - Intrinsics for Short Vector Math Library (SVML) Operations
 //! - Intrinsics for Other Mathematics Operations
 
-use crate::core_arch::x86::*;
+use crate::{
+    core_arch::{simd_llvm::*, x86::*},
+    mem::transmute,
+};
 
 #[cfg(test)]
 use stdsimd_test::assert_instr;
@@ -297,6 +300,72 @@ pub unsafe fn _mm_maskz_add_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
     _mm_mask_add_round_ss(zero, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
+/// Adds packed int32 elements in a and b, and stores the result.
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#test=_mm512_add_epi32)
+#[inline]
+#[target_feature(enable = "avx512f")]
+#[cfg_attr(test, assert_instr(vpaddd))]
+pub unsafe fn _mm512_add_epi32(a: __m512i, b: __m512i) -> __m512i {
+    transmute(simd_add(a.as_i32x16(), b.as_i32x16()))
+}
+
+/// Adds packed int32 elements in a and b, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#test=_mm512_mask_add_epi32)
+#[inline]
+#[target_feature(enable = "avx512f")]
+#[cfg_attr(test, assert_instr(vpaddd))]
+pub unsafe fn _mm512_mask_add_epi32(src: __m512i, k: __mmask16, a: __m512i, b: __m512i) -> __m512i {
+    let res = simd_add(a.as_i32x16(), b.as_i32x16());
+    transmute(simd_select_bitmask(k, res, src.as_i32x16()))
+}
+
+/// Adds packed int32 elements in a and b, and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#test=_mm512_maskz_add_epi32)
+#[inline]
+#[target_feature(enable = "avx512f")]
+#[cfg_attr(test, assert_instr(vpaddd))]
+pub unsafe fn _mm512_maskz_add_epi32(k: __mmask16, a: __m512i, b: __m512i) -> __m512i {
+    let res = simd_add(a.as_i32x16(), b.as_i32x16());
+    let zero = _mm512_setzero_si512().as_i32x16();
+    transmute(simd_select_bitmask(k, res, zero))
+}
+
+/// Adds packed int64 elements in a and b, and stores the result.
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#test=_mm512_add_epi64)
+#[inline]
+#[target_feature(enable = "avx512f")]
+#[cfg_attr(test, assert_instr(vpaddq))]
+pub unsafe fn _mm512_add_epi64(a: __m512i, b: __m512i) -> __m512i {
+    transmute(simd_add(a.as_i64x8(), b.as_i64x8()))
+}
+
+/// Adds packed int64 elements in a and b, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#test=_mm512_mask_add_epi64)
+#[inline]
+#[target_feature(enable = "avx512f")]
+#[cfg_attr(test, assert_instr(vpaddq))]
+pub unsafe fn _mm512_mask_add_epi64(src: __m512i, k: __mmask8, a: __m512i, b: __m512i) -> __m512i {
+    let res = simd_add(a.as_i64x8(), b.as_i64x8());
+    transmute(simd_select_bitmask(k, res, src.as_i64x8()))
+}
+
+/// Adds packed int64 elements in a and b, and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#test=_mm512_maskz_add_epi64)
+#[inline]
+#[target_feature(enable = "avx512f")]
+#[cfg_attr(test, assert_instr(vpaddq))]
+pub unsafe fn _mm512_maskz_add_epi64(k: __mmask8, a: __m512i, b: __m512i) -> __m512i {
+    let res = simd_add(a.as_i64x8(), b.as_i64x8());
+    let zero = _mm512_setzero_si512().as_i64x8();
+    transmute(simd_select_bitmask(k, res, zero))
+}
+
 // -- Intrinsics for Determining Minimum and Maximum Values
 
 // -- Intrinsics for FP Fused Multiply-Add (FMA) Operations
@@ -457,5 +526,51 @@ mod tests {
 
         let r = _mm_maskz_add_ss(mask, a, b);
         assert_eq_m128(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm512_maskz_add_epi32() {
+        let a = _mm512_set_epi32(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        let b = _mm512_set_epi32(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        let mask = 0b0000_1111_1111_1111 as i16;
+
+        let expected = _mm512_set_epi32(0, 0, 0, 0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
+
+        let r = _mm512_maskz_add_epi32(mask, a, b);
+        assert_eq_m512i(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm512_add_epi32() {
+        let a = _mm512_set_epi32(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        let b = _mm512_set_epi32(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+        let expected = _mm512_set_epi32(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
+
+        let r = _mm512_add_epi32(a, b);
+        assert_eq_m512i(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm512_maskz_add_epi64() {
+        let a = _mm512_set_epi64(1, 2, 3, 4, 5, 6, 7, 8);
+        let b = _mm512_set_epi64(1, 1, 1, 1, 1, 1, 1, 1);
+        let mask = 0b0000__1111 as i8;
+
+        let expected = _mm512_set_epi64(0, 0, 0, 0, 6, 7, 8, 9);
+
+        let r = _mm512_maskz_add_epi64(mask, a, b);
+        assert_eq_m512i(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm512_add_epi64() {
+        let a = _mm512_set_epi64(1, 2, 3, 4, 5, 6, 7, 8);
+        let b = _mm512_set_epi64(1, 1, 1, 1, 1, 1, 1, 1);
+
+        let expected = _mm512_set_epi64(2, 3, 4, 5, 6, 7, 8, 9);
+
+        let r = _mm512_add_epi64(a, b);
+        assert_eq_m512i(r, expected);
     }
 }
