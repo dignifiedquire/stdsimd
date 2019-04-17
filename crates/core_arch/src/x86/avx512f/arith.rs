@@ -8,11 +8,8 @@
 //! - Intrinsics for Subtraction Operations
 //! - Intrinsics for Short Vector Math Library (SVML) Operations
 //! - Intrinsics for Other Mathematics Operations
-use crate::{
-    core_arch::{simd::*, simd_llvm::*, x86::*},
-    mem::{self, transmute},
-    ptr,
-};
+
+use crate::core_arch::x86::*;
 
 #[cfg(test)]
 use stdsimd_test::assert_instr;
@@ -56,7 +53,7 @@ pub unsafe fn _mm512_maskz_add_pd(k: __mmask8, a: __m512d, b: __m512d) -> __m512
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_add_round_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddpd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddpd))]
 pub unsafe fn _mm512_add_round_pd(a: __m512d, b: __m512d, round: i32) -> __m512d {
     let zero = _mm512_setzero_pd();
     _mm512_mask_add_round_pd(zero, 255u8 as i8, a, b, round)
@@ -67,7 +64,7 @@ pub unsafe fn _mm512_add_round_pd(a: __m512d, b: __m512d, round: i32) -> __m512d
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_mask_add_round_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddpd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddpd))]
 pub unsafe fn _mm512_mask_add_round_pd(
     src: __m512d,
     k: __mmask8,
@@ -88,16 +85,15 @@ pub unsafe fn _mm512_mask_add_round_pd(
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_maskz_add_round_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddpd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddpd))]
 pub unsafe fn _mm512_maskz_add_round_pd(
     k: __mmask8,
     a: __m512d,
     b: __m512d,
     round: i32,
 ) -> __m512d {
-    let res: i64x8 = transmute(_mm512_add_round_pd(a, b, round));
-    let zero: i64x8 = transmute(_mm512_setzero_pd());
-    transmute(simd_select_bitmask(k, res, zero))
+    let zero = _mm512_setzero_pd();
+    _mm512_mask_add_round_pd(zero, k, a, b, round)
 }
 
 /// Adds packed float32 elements in a and b, and stores the result.
@@ -105,7 +101,7 @@ pub unsafe fn _mm512_maskz_add_round_pd(
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_add_ps)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddps))]
 pub unsafe fn _mm512_add_ps(a: __m512, b: __m512) -> __m512 {
     _mm512_add_round_ps(a, b, _MM_FROUND_CUR_DIRECTION)
 }
@@ -115,7 +111,7 @@ pub unsafe fn _mm512_add_ps(a: __m512, b: __m512) -> __m512 {
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_mask_add_ps)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddps))]
 pub unsafe fn _mm512_mask_add_ps(src: __m512, k: __mmask16, a: __m512, b: __m512) -> __m512 {
     _mm512_mask_add_round_ps(src, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
@@ -125,7 +121,7 @@ pub unsafe fn _mm512_mask_add_ps(src: __m512, k: __mmask16, a: __m512, b: __m512
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_maskz_add_ps)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+#[cfg_attr(test, assert_instr(vaddps))]
 pub unsafe fn _mm512_maskz_add_ps(k: __mmask16, a: __m512, b: __m512) -> __m512 {
     _mm512_maskz_add_round_ps(k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
@@ -135,7 +131,7 @@ pub unsafe fn _mm512_maskz_add_ps(k: __mmask16, a: __m512, b: __m512) -> __m512 
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_add_round_ps)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddps))]
 pub unsafe fn _mm512_add_round_ps(a: __m512, b: __m512, round: i32) -> __m512 {
     let zero = _mm512_setzero_ps();
     _mm512_mask_add_round_ps(zero, 0xFFFFu16 as __mmask16, a, b, round)
@@ -146,7 +142,7 @@ pub unsafe fn _mm512_add_round_ps(a: __m512, b: __m512, round: i32) -> __m512 {
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_mask_add_round_ps)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddps))]
 pub unsafe fn _mm512_mask_add_round_ps(
     src: __m512,
     k: __mmask16,
@@ -167,7 +163,7 @@ pub unsafe fn _mm512_mask_add_round_ps(
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_maskz_add_round_ps)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddd))]
+// FIXME: #[cfg_attr(test, assert_instr(vpaddd))]
 pub unsafe fn _mm512_maskz_add_round_ps(k: __mmask16, a: __m512, b: __m512, round: i32) -> __m512 {
     let zero = _mm512_setzero_ps();
     _mm512_mask_add_round_ps(zero, k, a, b, round)
@@ -178,7 +174,7 @@ pub unsafe fn _mm512_maskz_add_round_ps(k: __mmask16, a: __m512, b: __m512, roun
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_add_round_sd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddsd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_add_round_sd(a: __m128d, b: __m128d, round: i32) -> __m128d {
     let zero = _mm_setzero_pd();
     _mm_mask_add_round_sd(zero, -1i8 as __mmask8, a, b, round)
@@ -189,7 +185,7 @@ pub unsafe fn _mm_add_round_sd(a: __m128d, b: __m128d, round: i32) -> __m128d {
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_mask_add_round_sd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddsd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_mask_add_round_sd(
     src: __m128d,
     k: __mmask8,
@@ -210,7 +206,7 @@ pub unsafe fn _mm_mask_add_round_sd(
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_maskz_add_round_sd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddsd))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_maskz_add_round_sd(k: __mmask8, a: __m128d, b: __m128d, round: i32) -> __m128d {
     let zero = _mm_setzero_pd();
     _mm_mask_add_round_sd(zero, k, a, b, round)
@@ -234,7 +230,7 @@ pub unsafe fn _mm_mask_add_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d)
 #[cfg_attr(test, assert_instr(vaddsd))]
 pub unsafe fn _mm_maskz_add_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
     let zero = _mm_setzero_pd();
-    _mm_mask_add_round_sd(zero, k, a, b, _MM_FROUND_CUR_DIRECTION)
+    addsdround(a, b, zero, k, _MM_FROUND_CUR_DIRECTION)
 }
 
 /// Add the lower float32 element in a and b using rounding control round, stores the result in the lower destination element, and copies the upper three packed elements from a to the upper destination elements.
@@ -242,7 +238,7 @@ pub unsafe fn _mm_maskz_add_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_add_round_ss)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddss))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddss))]
 pub unsafe fn _mm_add_round_ss(a: __m128, b: __m128, round: i32) -> __m128 {
     let zero = _mm_setzero_ps();
     _mm_mask_add_round_ss(zero, -1i8 as __mmask8, a, b, round)
@@ -253,7 +249,7 @@ pub unsafe fn _mm_add_round_ss(a: __m128, b: __m128, round: i32) -> __m128 {
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_mask_add_round_ss)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddss))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddss))]
 pub unsafe fn _mm_mask_add_round_ss(
     src: __m128,
     k: __mmask8,
@@ -274,7 +270,7 @@ pub unsafe fn _mm_mask_add_round_ss(
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_maskz_add_round_ss)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vaddss))]
+// FIXME: #[cfg_attr(test, assert_instr(vaddss))]
 pub unsafe fn _mm_maskz_add_round_ss(k: __mmask8, a: __m128, b: __m128, round: i32) -> __m128 {
     let zero = _mm_setzero_ps();
     _mm_mask_add_round_ss(zero, k, a, b, round)
@@ -285,7 +281,7 @@ pub unsafe fn _mm_maskz_add_round_ss(k: __mmask8, a: __m128, b: __m128, round: i
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_mask_add_ss)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddss))]
+#[cfg_attr(test, assert_instr(vaddss))]
 pub unsafe fn _mm_mask_add_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
     _mm_mask_add_round_ss(src, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
@@ -295,7 +291,7 @@ pub unsafe fn _mm_mask_add_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) ->
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_maskz_add_ss)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddss))]
+#[cfg_attr(test, assert_instr(vaddss))]
 pub unsafe fn _mm_maskz_add_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
     let zero = _mm_setzero_ps();
     _mm_mask_add_round_ss(zero, k, a, b, _MM_FROUND_CUR_DIRECTION)

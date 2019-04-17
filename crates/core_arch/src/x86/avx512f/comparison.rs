@@ -1,10 +1,5 @@
 //! Intrinsics for Comparison Operations
 
-use crate::{
-    core_arch::{simd::*, simd_llvm::*, x86::*},
-    mem,
-};
-
 // _mm512_cmp_pd_mask
 
 // extern __mmask8 __cdecl _mm512_cmp_pd_mask(__m512d a, __m512d b, const int imm);

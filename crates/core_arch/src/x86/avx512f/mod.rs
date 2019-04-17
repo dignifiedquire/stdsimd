@@ -1,8 +1,3 @@
-use crate::{
-    core_arch::{simd::*, simd_llvm::*, x86::*},
-    mem,
-};
-
 mod arith;
 pub use self::arith::*;
 
