@@ -1,13 +1,4 @@
-//! # Intrinsics for Arithmetic Operations
-//!
-//! This module contains the following intrinsics.
-//! - Intrinsics for Addition Operations
-//! - Intrinsics for Determining Minimum and Maximum Values
-//! - Intrinsics for FP Fused Multiply-Add (FMA) Operations
-//! - Intrinsics for Multiplication Operations
-//! - Intrinsics for Subtraction Operations
-//! - Intrinsics for Short Vector Math Library (SVML) Operations
-//! - Intrinsics for Other Mathematics Operations
+//! Intrinsics for Addition Operations
 
 use crate::{
     core_arch::{simd_llvm::*, x86::*},
@@ -17,9 +8,7 @@ use crate::{
 #[cfg(test)]
 use stdsimd_test::assert_instr;
 
-// -- Intrinsics for Addition Operations
-
-// ---  Intrinsics for FP Addition Operations
+// --  Intrinsics for FP Addition Operations
 
 /// Adds packed float64 elements in a and b, and stores the result.
 ///
@@ -300,6 +289,8 @@ pub unsafe fn _mm_maskz_add_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
     _mm_mask_add_round_ss(zero, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
+// --  Intrinsics for Integer Addition Operations
+
 /// Adds packed int32 elements in a and b, and stores the result.
 ///
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#test=_mm512_add_epi32)
@@ -365,18 +356,6 @@ pub unsafe fn _mm512_maskz_add_epi64(k: __mmask8, a: __m512i, b: __m512i) -> __m
     let zero = _mm512_setzero_si512().as_i64x8();
     transmute(simd_select_bitmask(k, res, zero))
 }
-
-// -- Intrinsics for Determining Minimum and Maximum Values
-
-// -- Intrinsics for FP Fused Multiply-Add (FMA) Operations
-
-// -- Intrinsics for Multiplication Operations
-
-// -- Intrinsics for Subtraction Operations
-
-// -- Intrinsics for Short Vector Math Library (SVML) Operations
-
-// -- Intrinsics for Other Mathematics Operations
 
 /// LLVM intrinsics used in the above functions
 #[allow(improper_ctypes)]
