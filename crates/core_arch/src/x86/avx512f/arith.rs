@@ -77,7 +77,7 @@ pub unsafe fn _mm512_mask_add_round_pd(
 ) -> __m512d {
     macro_rules! call {
         ($imm8:expr) => {
-            addpd512(src, a, b, k, $imm8)
+            addpd512(a, b, src, k, $imm8)
         };
     }
     constify_imm8!(round, call)
@@ -294,14 +294,7 @@ pub unsafe fn _mm_maskz_add_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
 #[allow(improper_ctypes)]
 extern "C" {
     #[link_name = "llvm.x86.avx512.mask.add.pd.512"]
-    // <8 x double> @llvm.x86.avx512.mask.add.pd.512(
-    //   <8 x double> %a,
-    //   <8 x double> %b,
-    //   <8 x double> %c,
-    //   i8 %mask,
-    //   i32 8
-    // )
-    fn addpd512(src: __m512d, a: __m512d, b: __m512d, k: __mmask8, round: i32) -> __m512d;
+    fn addpd512(a: __m512d, b: __m512d, src: __m512d, k: __mmask8, round: i32) -> __m512d;
 }
 
 #[cfg(test)]
@@ -313,9 +306,9 @@ mod tests {
 
     #[simd_test(enable = "avx512f")]
     unsafe fn test__mm512_add_pd() {
-        let a = _mm512_set_pd(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+        let a = _mm512_set_pd(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
         let b = _mm512_set_pd(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
-        let expected = _mm512_set_pd(2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
+        let expected = _mm512_set_pd(2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
 
         let r: __m512d = _mm512_add_pd(a, b);
         assert_eq_m512d(r, expected);
@@ -323,11 +316,11 @@ mod tests {
 
     #[simd_test(enable = "avx512f")]
     unsafe fn test__mm512_maskz_add_pd() {
-        let a = _mm512_set_pd(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+        let a = _mm512_set_pd(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
         let b = _mm512_set_pd(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
         let mask = 0b1010_1010u8 as i8;
 
-        let expected = _mm512_set_pd(2.0, 0.0, 2.0, 0.0, 2.0, 0.0, 2.0, 0.0);
+        let expected = _mm512_set_pd(2.0, 0.0, 4.0, 0.0, 6.0, 0.0, 8.0, 0.0);
 
         let r: __m512d = _mm512_maskz_add_pd(mask, a, b);
         assert_eq_m512d(r, expected);
