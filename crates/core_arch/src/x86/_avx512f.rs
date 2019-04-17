@@ -144,22 +144,6 @@ pub unsafe fn _mm512_xor_si512(a: __m512i, b: __m512i) -> __m512i {
     transmute(simd_xor(a.as_i64x8(), b.as_i64x8()))
 }
 
-/// Shuffles bytes from `a` according to the content of `b`.
-///
-/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_shuffle_epi8)
-#[inline]
-#[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpshufb))]
-pub unsafe fn _mm512_shuffle_epi8(a: __m512i, b: __m512i) -> __m512i {
-    transmute(pshufb(a.as_i8x64(), b.as_i8x64()))
-}
-
-#[allow(improper_ctypes)]
-extern "C" {
-    #[link_name = "llvm.x86.avx512.pshuf.b.512"]
-    fn pshufb(a: i8x64, b: i8x64) -> i8x64;
-}
-
 #[cfg(test)]
 mod tests {
     use std;
@@ -262,26 +246,5 @@ mod tests {
             0,
         );
         assert_eq_m512i(r, e);
-    }
-
-    #[simd_test(enable = "avx512f")]
-    unsafe fn test_mm512_shuffle_epi8() {
-        #[rustfmt::skip]
-        let a = _mm512_setr_epi32(
-            1, 2, 3, 4, 5, 6, 7, 8,
-            9, 10, 11, 12, 13, 14, 15, 16,
-        );
-        #[rustfmt::skip]
-        let b = _mm512_setr_epi32(
-            4, 128u8 as i32, 4, 3, 24, 12, 6, 19,
-            12, 5, 5, 10, 4, 1, 8, 0,
-        );
-        #[rustfmt::skip]
-        let expected = _mm512_setr_epi32(
-            5, 0, 5, 4, 9, 13, 7, 4,
-            13, 6, 6, 11, 5, 2, 9, 1,
-        );
-        let r = _mm512_shuffle_epi8(a, b);
-        assert_eq_m512i(r, expected);
     }
 }
