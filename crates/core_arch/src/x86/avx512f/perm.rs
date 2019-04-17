@@ -1,0 +1,1 @@
+//! Intrinsics for Permutation Operations

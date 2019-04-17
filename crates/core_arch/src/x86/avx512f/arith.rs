@@ -107,7 +107,7 @@ pub unsafe fn _mm512_maskz_add_round_pd(
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
 pub unsafe fn _mm512_add_ps(a: __m512, b: __m512) -> __m512 {
-    unimplemented!()
+    _mm512_add_round_ps(a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
 /// Adds packed float32 elements in a and b, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
@@ -117,7 +117,7 @@ pub unsafe fn _mm512_add_ps(a: __m512, b: __m512) -> __m512 {
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
 pub unsafe fn _mm512_mask_add_ps(src: __m512, k: __mmask16, a: __m512, b: __m512) -> __m512 {
-    unimplemented!()
+    _mm512_mask_add_round_ps(src, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
 /// Adds packed float32 elements in a and b, and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
@@ -127,7 +127,7 @@ pub unsafe fn _mm512_mask_add_ps(src: __m512, k: __mmask16, a: __m512, b: __m512
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
 pub unsafe fn _mm512_maskz_add_ps(k: __mmask16, a: __m512, b: __m512) -> __m512 {
-    unimplemented!()
+    _mm512_maskz_add_round_ps(k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
 
 /// Adds packed float32 elements in a and b using rounding control round, and stores the result.
@@ -137,7 +137,8 @@ pub unsafe fn _mm512_maskz_add_ps(k: __mmask16, a: __m512, b: __m512) -> __m512 
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
 pub unsafe fn _mm512_add_round_ps(a: __m512, b: __m512, round: i32) -> __m512 {
-    unimplemented!()
+    let zero = _mm512_setzero_ps();
+    _mm512_mask_add_round_ps(zero, 0xFFFFu16 as __mmask16, a, b, round)
 }
 
 /// Adds packed float32 elements in a and b using rounding control round, and stores the result using writemask k (elements are copied from src when the corresponding mask bit is not set).
@@ -153,7 +154,12 @@ pub unsafe fn _mm512_mask_add_round_ps(
     b: __m512,
     round: i32,
 ) -> __m512 {
-    unimplemented!()
+    macro_rules! call {
+        ($imm8:expr) => {
+            addps512(a, b, src, k, $imm8)
+        };
+    }
+    constify_imm8!(round, call)
 }
 
 /// Adds packed float32 elements in a and b using rounding control round, and stores the result using zeromask k (elements are zeroed out when the corresponding mask bit is not set).
@@ -163,7 +169,9 @@ pub unsafe fn _mm512_mask_add_round_ps(
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vpaddd))]
 pub unsafe fn _mm512_maskz_add_round_ps(k: __mmask16, a: __m512, b: __m512, round: i32) -> __m512 {
-    unimplemented!()
+    let res: i32x16 = transmute(_mm512_add_round_ps(a, b, round));
+    let zero: i32x16 = transmute(_mm512_setzero_ps());
+    transmute(simd_select_bitmask(k, res, zero))
 }
 
 /// Adds the lower float64 element in a and b using rounding control round, stores the result in the lower destination element, and copies the upper element from a to the upper destination element.
@@ -295,6 +303,8 @@ pub unsafe fn _mm_maskz_add_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
 extern "C" {
     #[link_name = "llvm.x86.avx512.mask.add.pd.512"]
     fn addpd512(a: __m512d, b: __m512d, src: __m512d, k: __mmask8, round: i32) -> __m512d;
+    #[link_name = "llvm.x86.avx512.mask.add.ps.512"]
+    fn addps512(a: __m512, b: __m512, src: __m512, k: __mmask16, round: i32) -> __m512;
 }
 
 #[cfg(test)]
@@ -324,5 +334,39 @@ mod tests {
 
         let r: __m512d = _mm512_maskz_add_pd(mask, a, b);
         assert_eq_m512d(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm512_add_ps() {
+        let a = _mm512_set_ps(
+            1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
+        );
+        let b = _mm512_set_ps(
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+        );
+        let expected = _mm512_set_ps(
+            2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0,
+        );
+
+        let r: __m512 = _mm512_add_ps(a, b);
+        assert_eq_m512(r, expected);
+    }
+
+    #[simd_test(enable = "avx512f")]
+    unsafe fn test__mm512_maskz_add_ps() {
+        let a = _mm512_set_ps(
+            1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
+        );
+        let b = _mm512_set_ps(
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+        );
+        let mask = 0b1010_1010_1010_1010u16 as i16;
+
+        let expected = _mm512_set_ps(
+            2.0, 0.0, 4.0, 0.0, 6.0, 0.0, 8.0, 0.0, 2.0, 0.0, 4.0, 0.0, 6.0, 0.0, 8.0, 0.0,
+        );
+
+        let r: __m512 = _mm512_maskz_add_ps(mask, a, b);
+        assert_eq_m512(r, expected);
     }
 }
