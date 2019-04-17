@@ -27,3 +27,43 @@ pub unsafe fn _mm512_setzero_pd() -> __m512d {
     // All-0 is a properly initialized __m512d
     mem::zeroed()
 }
+
+/// Sets packed double-precision (64-bit) floating-point elements in returned
+/// vector with the supplied values.
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_set_pd)
+#[inline]
+#[target_feature(enable = "avx512f")]
+// This intrinsic has no corresponding instruction.
+pub unsafe fn _mm512_set_pd(
+    a: f64,
+    b: f64,
+    c: f64,
+    d: f64,
+    e: f64,
+    f: f64,
+    g: f64,
+    h: f64,
+) -> __m512d {
+    _mm512_setr_pd(h, g, f, e, d, c, b, a)
+}
+
+/// Sets packed double-precision (64-bit) floating-point elements in returned
+/// vector with the supplied values in reverse order.
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_setr_pd)
+#[inline]
+#[target_feature(enable = "avx512f")]
+// This intrinsic has no corresponding instruction.
+pub unsafe fn _mm512_setr_pd(
+    a: f64,
+    b: f64,
+    c: f64,
+    d: f64,
+    e: f64,
+    f: f64,
+    g: f64,
+    h: f64,
+) -> __m512d {
+    __m512d(a, b, c, d, e, f, g, h)
+}

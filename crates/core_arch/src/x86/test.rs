@@ -143,3 +143,11 @@ pub unsafe fn assert_eq_m512i(a: __m512i, b: __m512i) {
     }
     assert_eq!(A { a }.b, A { a: b }.b)
 }
+
+pub unsafe fn assert_eq_m512d(a: __m512d, b: __m512d) {
+    union A {
+        a: __m512d,
+        b: [f64; 8],
+    }
+    assert_eq!(A { a }.b, A { a: b }.b)
+}

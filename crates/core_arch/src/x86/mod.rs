@@ -342,6 +342,10 @@ types! {
     pub struct __m512d(f64, f64, f64, f64, f64, f64, f64, f64);
 }
 
+/// The `__mmask8` type used in AVX-512 intrinsics, a 8-bit integer
+#[allow(non_camel_case_types)]
+pub type __mmask8 = i8;
+
 /// The `__mmask16` type used in AVX-512 intrinsics, a 16-bit integer
 #[allow(non_camel_case_types)]
 pub type __mmask16 = i16;
