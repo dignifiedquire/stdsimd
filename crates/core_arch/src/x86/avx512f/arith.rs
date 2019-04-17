@@ -26,7 +26,7 @@ use stdsimd_test::assert_instr;
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_add_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpadpd))]
+#[cfg_attr(test, assert_instr(vaddpd))]
 pub unsafe fn _mm512_add_pd(a: __m512d, b: __m512d) -> __m512d {
     _mm512_add_round_pd(a, b, _MM_FROUND_CUR_DIRECTION)
 }
@@ -36,7 +36,7 @@ pub unsafe fn _mm512_add_pd(a: __m512d, b: __m512d) -> __m512d {
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_mask_add_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpadpd))]
+#[cfg_attr(test, assert_instr(vaddpd))]
 pub unsafe fn _mm512_mask_add_pd(src: __m512d, k: __mmask8, a: __m512d, b: __m512d) -> __m512d {
     _mm512_mask_add_round_pd(src, k, a, b, _MM_FROUND_CUR_DIRECTION)
 }
@@ -46,7 +46,7 @@ pub unsafe fn _mm512_mask_add_pd(src: __m512d, k: __mmask8, a: __m512d, b: __m51
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm512_maskz_add_pd)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vpaddpd))]
+#[cfg_attr(test, assert_instr(vaddpd))]
 pub unsafe fn _mm512_maskz_add_pd(k: __mmask8, a: __m512d, b: __m512d) -> __m512d {
     _mm512_maskz_add_round_pd(k, a, b, _MM_FROUND_CUR_DIRECTION)
 }

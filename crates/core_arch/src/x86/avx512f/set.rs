@@ -9,7 +9,7 @@ use crate::{
 /// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#avx512techs=AVX512F&expand=33,34,4990&text=_mm512_setzero_si512)
 #[inline]
 #[target_feature(enable = "avx512f")]
-#[cfg_attr(test, assert_instr(vxorps))]
+#[cfg_attr(test, assert_instr(vpxorq))]
 pub unsafe fn _mm512_setzero_si512() -> __m512i {
     // All-0 is a properly initialized __m512i
     mem::zeroed()
