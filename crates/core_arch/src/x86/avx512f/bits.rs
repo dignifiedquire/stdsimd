@@ -22,12 +22,24 @@ pub unsafe fn _mm512_xor_si512(a: __m512i, b: __m512i) -> __m512i {
 #[target_feature(enable = "avx512f")]
 #[cfg_attr(test, assert_instr(vprord))]
 pub unsafe fn _mm512_ror_epi32(a: __m512i, imm8: i32) -> __m512i {
+    prord512(a, imm8)
+}
+
+/// Rotate the bits in each packed 32-bit integer in a to the right by the number of bits specified in `imm8`, and store the results in `dst`.
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#avx512techs=AVX512F&expand=33,34,4990&text=_mm_ror_epi32)
+#[inline]
+#[target_feature(enable = "avx512f")]
+#[cfg_attr(test, assert_instr(vprord))]
+pub unsafe fn _mm_ror_epi32(a: __m128i, imm8: i32) -> __m128i {
     prord128(a, imm8)
 }
 
 /// LLVM intrinsics used in the above functions
 #[allow(improper_ctypes)]
 extern "C" {
+    #[link_name = "llvm.x86.avx512.mask.pror.d.512"]
+    fn prord512(a: __m512i, imm8: i32) -> __m512i;
     #[link_name = "llvm.x86.avx512.mask.pror.d.128"]
-    fn prord128(a: __m512i, imm8: i32) -> __m512i;
+    fn prord128(a: __m128i, imm8: i32) -> __m128i;
 }
