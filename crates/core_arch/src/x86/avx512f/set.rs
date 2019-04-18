@@ -234,3 +234,14 @@ pub unsafe fn _mm512_setr_epi64(
     let r = i64x8(e7, e6, e5, e4, e3, e2, e1, e0);
     transmute(r)
 }
+
+/// Broadcast 32-bit integer a to all elements of `dst`.
+///
+/// [Intel's documentation](https://software.intel.com/sites/landingpage/IntrinsicsGuide/#avx512techs=AVX512F&expand=33,34,4990&text=_mm512_set1_epi32)
+#[inline]
+#[target_feature(enable = "avx512f")]
+// This intrinsic has no corresponding intstruction.
+pub unsafe fn _mm512_set1_epi32(a: i32) -> __m512i {
+    let r = i64x8::splat(a as i64);
+    transmute(r)
+}
